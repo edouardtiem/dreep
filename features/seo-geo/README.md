@@ -26,12 +26,12 @@ Two page types:
 - Google Search Console verified + sitemap submitted (9 pages discovered, 0 errors)
 - Deployed on correct Vercel project (`dreep-n6fc`) with domain `www.dreep.app`
 - Supabase client lazy-init — build works even without env vars
+- GA4 funnel events at each onboarding step (1→5) + `link_copied` + `email_captured`
 
 ## What's Next
 
 - Wait for GA4 data (24-48h for full reports)
 - Monitor Search Console indexation (pages should index within days)
-- Phase 2: Custom GA4 events (calculator engagement, CTA clicks)
 - Phase 3: Content expansion (more industries, more problems)
 - Phase 4: Migrate content to Supabase for CMS-like editing
 
@@ -44,6 +44,7 @@ _None_
 | Task | Title | Status | Date |
 |---|---|---|---|
 | DONE-001 | SEO/GEO Phase 1 — 8 Seed Pages | ✅ Done | 2026-02-06 |
+| DONE-002 | GA4 + Search Console + Funnel Events | ✅ Done | 2026-02-06 |
 
 ## Decisions
 
