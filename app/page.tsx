@@ -27,6 +27,7 @@ export default function Home() {
   const [understanding, setUnderstanding] = useState<CompanyUnderstanding | null>(null);
   const [breakdowns, setBreakdowns] = useState<Breakdown[]>([]);
   const [annualCost, setAnnualCost] = useState(0);
+  const [diagnosticId, setDiagnosticId] = useState<string | null>(null);
   const [direction, setDirection] = useState(1);
 
   const goTo = (step: number) => {
@@ -40,6 +41,7 @@ export default function Home() {
     setUnderstanding(null);
     setBreakdowns([]);
     setAnnualCost(0);
+    setDiagnosticId(null);
     setDirection(-1);
     setCurrentStep(1);
   };
@@ -215,13 +217,32 @@ export default function Home() {
               <StepSeeResult
                 breakdowns={breakdowns}
                 annualCost={annualCost}
-                onNext={() => goTo(5)}
+                onNext={async () => {
+                  if (!diagnosticData || !understanding) return goTo(5);
+                  try {
+                    const res = await fetch("/api/diagnostics", {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({
+                        url,
+                        understanding,
+                        questions: diagnosticData.questions,
+                        breakdownTemplates: diagnosticData.breakdownTemplates,
+                      }),
+                    });
+                    const json = await res.json();
+                    if (json.success) setDiagnosticId(json.id);
+                  } catch {
+                    // Save failed silently — still show link step with fallback
+                  }
+                  goTo(5);
+                }}
                 onBack={() => goTo(3)}
               />
             )}
 
             {currentStep === 5 && (
-              <StepLinkReady onReset={handleReset} />
+              <StepLinkReady diagnosticId={diagnosticId} onReset={handleReset} />
             )}
           </motion.div>
         </AnimatePresence>

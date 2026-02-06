@@ -3,10 +3,9 @@
 import { useState } from "react";
 
 interface StepLinkReadyProps {
+  diagnosticId?: string | null;
   onReset: () => void;
 }
-
-const shareableLink = "dreep.app/d/abc123";
 
 const outreachMessage = `Bonjour [Prénom],
 
@@ -17,12 +16,17 @@ Suite à notre échange, j'ai préparé un diagnostic rapide pour vous aider à 
 À bientôt,
 [Votre nom]`;
 
-export default function StepLinkReady({ onReset }: StepLinkReadyProps) {
+export default function StepLinkReady({ diagnosticId, onReset }: StepLinkReadyProps) {
   const [copied, setCopied] = useState(false);
+
+  const baseUrl = typeof window !== "undefined" ? window.location.origin : "";
+  const shareableLink = diagnosticId
+    ? `${baseUrl}/d/${diagnosticId}`
+    : "dreep.app/d/...";
 
   const handleCopy = async () => {
     try {
-      await navigator.clipboard.writeText(`https://${shareableLink}`);
+      await navigator.clipboard.writeText(shareableLink);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch {
@@ -52,24 +56,25 @@ export default function StepLinkReady({ onReset }: StepLinkReadyProps) {
         </div>
 
         <h2 className="font-serif text-[28px] font-normal text-ink">
-          Votre diagnostic est prêt !
+          Votre diagnostic est pr&ecirc;t !
         </h2>
       </div>
 
       {/* Shareable link */}
       <div className="space-y-3">
         <label className="block text-[11px] font-semibold uppercase tracking-[0.08em] text-slate">
-          Lien à partager
+          Lien &agrave; partager
         </label>
         <div className="flex items-center gap-2">
-          <div className="flex-1 bg-surface border border-border rounded-[10px] py-3.5 px-[18px] font-mono text-[14px] text-ink select-all">
+          <div className="flex-1 bg-surface border border-border rounded-[10px] py-3.5 px-[18px] font-mono text-[14px] text-ink select-all truncate">
             {shareableLink}
           </div>
           <button
             onClick={handleCopy}
-            className="bg-ink text-white rounded-[10px] py-3.5 px-7 text-[15px] font-semibold hover:bg-ink-light transition-colors duration-150 shrink-0 cursor-pointer"
+            disabled={!diagnosticId}
+            className="bg-ink text-white rounded-[10px] py-3.5 px-7 text-[15px] font-semibold hover:bg-ink-light transition-colors duration-150 shrink-0 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {copied ? "Copié !" : "Copier"}
+            {copied ? "Copi\u00e9 !" : "Copier"}
           </button>
         </div>
       </div>
@@ -77,7 +82,7 @@ export default function StepLinkReady({ onReset }: StepLinkReadyProps) {
       {/* Outreach message suggestion */}
       <div className="space-y-3">
         <label className="block text-[11px] font-semibold uppercase tracking-[0.08em] text-slate">
-          Message d&apos;accroche suggéré
+          Message d&apos;accroche sugg&eacute;r&eacute;
         </label>
         <div className="bg-surface border border-border rounded-xl p-6">
           <p className="text-[15px] text-ink-light whitespace-pre-line leading-relaxed">
@@ -92,7 +97,7 @@ export default function StepLinkReady({ onReset }: StepLinkReadyProps) {
           onClick={onReset}
           className="border border-border text-ink-light rounded-[10px] py-3.5 px-7 text-[15px] font-medium hover:bg-cloud transition-colors duration-150 cursor-pointer"
         >
-          Créer un autre diagnostic
+          Cr&eacute;er un autre diagnostic
         </button>
       </div>
     </div>

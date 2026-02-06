@@ -7,7 +7,7 @@
 | 2 | Onboarding flow (5 screens) | ✅ Done |
 | 3 | Prospect experience (`/d/[id]`) | ✅ Done |
 | 4 | AI integration (web scraping + Claude) | ✅ Done |
-| 5 | Database + shareable links (Supabase) | Planned |
+| 5 | Database + shareable links (Supabase) | ✅ Done |
 | 6 | Product-led loop (Dreep branding, viral CTA) | Planned |
 | 7 | Programmatic SEO pages engine | Planned |
 | 8 | Polish (emails, notifications, analytics) | Planned |
@@ -19,11 +19,9 @@
 - Tested on: dealslate.app, acceor.com, koban.cloud, axonaut.com, boondmanager.com — all produce relevant diagnostics
 
 ## What Doesn't Work Yet
-- No persistence — diagnostics are lost on page refresh
-- `/d/[id]` still uses hardcoded mock data
 - No email notifications
 - No user accounts
-- Shareable link is fake (`dreep.app/d/abc123`)
+- No custom domain (links use localhost in dev)
 
 ## Progress Log
 | Date | What was done |
