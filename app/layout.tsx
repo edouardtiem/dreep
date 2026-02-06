@@ -38,7 +38,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fr">
-      <head>
+      <body
+        className={`${instrumentSerif.variable} ${dmSans.variable} ${jetbrainsMono.variable} antialiased`}
+      >
+        {children}
+        <Analytics />
         <Script
           src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
           strategy="afterInteractive"
@@ -46,12 +50,6 @@ export default function RootLayout({
         <Script id="gtag-init" strategy="afterInteractive">
           {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${GA_ID}');`}
         </Script>
-      </head>
-      <body
-        className={`${instrumentSerif.variable} ${dmSans.variable} ${jetbrainsMono.variable} antialiased`}
-      >
-        {children}
-        <Analytics />
       </body>
     </html>
   );
