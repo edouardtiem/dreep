@@ -13,12 +13,16 @@ export async function POST(request: Request) {
       );
     }
 
-    const { error } = await supabase.from("responses").insert({
-      diagnostic_id: diagnosticId,
-      answers,
-      breakdowns,
-      annual_cost: annualCost,
-    });
+    const { data, error } = await supabase
+      .from("responses")
+      .insert({
+        diagnostic_id: diagnosticId,
+        answers,
+        breakdowns,
+        annual_cost: annualCost,
+      })
+      .select("id")
+      .single();
 
     if (error) {
       console.error("Supabase insert error:", error);
@@ -28,7 +32,7 @@ export async function POST(request: Request) {
       );
     }
 
-    return NextResponse.json({ success: true });
+    return NextResponse.json({ success: true, id: data.id });
   } catch {
     return NextResponse.json(
       { success: false, error: "Erreur interne." },

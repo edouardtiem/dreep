@@ -2,10 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import CountUpNumber from "@/app/components/CountUpNumber";
-import CostBarChart from "@/app/components/CostBarChart";
-import DripCounter from "@/app/components/DripCounter";
-import CalculationBreakdown from "@/app/components/CalculationBreakdown";
+import ResultView from "@/app/components/ResultView";
 import { computeBreakdowns } from "@/app/lib/compute";
 import type {
   CompanyUnderstanding,
@@ -42,8 +39,7 @@ export default function ProspectExperience({
   const [answers, setAnswers] = useState<Record<string, number>>({});
   const [breakdowns, setBreakdowns] = useState<Breakdown[]>([]);
   const [annualCost, setAnnualCost] = useState(0);
-  const [showEmailInput, setShowEmailInput] = useState(false);
-  const [email, setEmail] = useState("");
+  const [shareUrl, setShareUrl] = useState<string | undefined>();
 
   const answeredCount = Object.keys(answers).length;
   const progressPercent = (answeredCount / questions.length) * 100;
@@ -66,9 +62,9 @@ export default function ProspectExperience({
     setAnnualCost(total);
     setCurrentScreen("result");
 
-    // Save response to DB
+    // Save response to DB and build share URL
     try {
-      await fetch("/api/responses", {
+      const res = await fetch("/api/responses", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -78,6 +74,10 @@ export default function ProspectExperience({
           annualCost: total,
         }),
       });
+      const json = await res.json();
+      if (json.success && json.id) {
+        setShareUrl(`${window.location.origin}/r/${json.id}`);
+      }
     } catch {
       // Save failed silently — prospect still sees their result
     }
@@ -102,7 +102,7 @@ export default function ProspectExperience({
         </h1>
 
         <p className="mt-5 text-[15px] text-ink-light tracking-[-0.01em]">
-          {understanding.sells} pour {understanding.target}.
+          {understanding.prospectIntro || `${understanding.sells} pour ${understanding.target}.`}
         </p>
 
         <p className="mt-3 text-[13px] text-mist">
@@ -197,64 +197,12 @@ export default function ProspectExperience({
         animate="animate"
         exit="exit"
         transition={transition}
-        className="max-w-2xl mx-auto px-6 py-16"
       >
-        <h2 className="font-serif text-[22px] font-normal text-ink-light tracking-[-0.01em] text-center">
-          Votre probl&egrave;me vous co&ucirc;te
-        </h2>
-
-        <div className="text-center mt-4">
-          <CountUpNumber value={annualCost} />
-        </div>
-
-        <p className="text-[15px] text-mist font-medium text-center mt-3">
-          par an
-        </p>
-
-        <div className="mt-16">
-          <CostBarChart annualCost={annualCost} />
-        </div>
-
-        <div className="mt-12 text-center">
-          <DripCounter annualCost={annualCost} />
-        </div>
-
-        <div className="mt-12">
-          <CalculationBreakdown breakdowns={breakdowns} />
-        </div>
-
-        {/* CTAs */}
-        <div className="mt-16 space-y-3">
-          {!showEmailInput ? (
-            <button
-              onClick={() => setShowEmailInput(true)}
-              className="w-full bg-ink text-white rounded-[10px] py-3.5 px-7 text-[15px] font-semibold hover:bg-ink-light transition-colors duration-150 cursor-pointer"
-            >
-              Envoyer ce rapport &agrave; mon &eacute;quipe
-            </button>
-          ) : (
-            <div className="flex items-center gap-3">
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="email@entreprise.com"
-                className="flex-1 border border-border rounded-[10px] py-3.5 px-[18px] text-[15px] bg-surface focus:outline-none focus:ring-2 focus:ring-ink/10 focus:border-ink placeholder:text-mist"
-              />
-              <button className="shrink-0 bg-ink text-white rounded-[10px] py-3.5 px-7 text-[15px] font-semibold hover:bg-ink-light transition-colors duration-150 cursor-pointer">
-                Envoyer
-              </button>
-            </div>
-          )}
-        </div>
-
-        {/* Footer */}
-        <p className="mt-20 text-center text-[12px] text-mist">
-          Powered by{" "}
-          <span className="font-semibold text-slate">Dreep</span> &mdash;
-          Montrez &agrave; vos prospects ce que leur probl&egrave;me leur
-          co&ucirc;te
-        </p>
+        <ResultView
+          annualCost={annualCost}
+          breakdowns={breakdowns}
+          shareUrl={shareUrl}
+        />
       </motion.div>
     );
   }

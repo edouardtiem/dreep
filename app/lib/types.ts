@@ -10,6 +10,7 @@ export interface CompanyUnderstanding {
   persona: string;
   differentiator: string;
   target: string;
+  prospectIntro?: string;
 }
 
 export interface DiagnosticQuestion {
@@ -51,5 +52,5 @@ export interface AnalyzeErrorResponse {
 
 export interface GenerateQuestionsResponse {
   success: true;
-  data: { questions: DiagnosticQuestion[]; breakdownTemplates: BreakdownTemplate[] };
+  data: { questions: DiagnosticQuestion[]; breakdownTemplates: BreakdownTemplate[]; prospectIntro: string };
 }

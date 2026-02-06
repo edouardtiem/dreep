@@ -24,6 +24,7 @@ On te donne une description validée d'une entreprise. Génère un diagnostic st
 Réponds UNIQUEMENT avec un objet JSON valide (pas de markdown, pas de commentaire), avec cette structure exacte :
 
 {
+  "prospectIntro": "1-2 phrases qui décrivent l'activité de l'entreprise du point de vue du PROSPECT (utilisez 'vous'). Exemple : 'Vous formez vos équipes aux métiers du numérique avec des parcours diplômants et du mentorat.'",
   "questions": [
     {
       "id": "q1",
@@ -56,7 +57,8 @@ RÈGLES IMPORTANTES :
 - Les unités doivent être courtes : "personnes", "h/sem", "€/h", "erreurs/mois", "deals/mois", etc.
 - step doit correspondre à l'unité : 1 pour des personnes, 0.5 pour des heures, 5 pour des euros, etc.
 - category doit être EXACTEMENT une de ces 4 valeurs : "Coût de temps", "Coût direct", "Coût d'opportunité", "Coût de risque"
-- Tous les textes en français`;
+- Tous les textes en français
+- prospectIntro s'adresse au PROSPECT (pas au commercial) — utilise "vous" et décris ce que l'entreprise fait pour eux, pas ce qu'elle "vend"`;
 
 export async function POST(request: Request) {
   try {
@@ -75,6 +77,7 @@ export async function POST(request: Request) {
 
     let questions: DiagnosticQuestion[];
     let breakdownTemplates: BreakdownTemplate[];
+    let prospectIntro: string;
     try {
       const message = await anthropic.messages.create({
         model: "claude-sonnet-4-5-20250929",
@@ -98,6 +101,7 @@ export async function POST(request: Request) {
       }
 
       const parsed = JSON.parse(jsonText) as {
+        prospectIntro: string;
         questions: DiagnosticQuestion[];
         breakdownTemplates: BreakdownTemplate[];
       };
@@ -111,6 +115,7 @@ export async function POST(request: Request) {
         return errorResponse("Erreur interne. Réessayez.", 500);
       }
 
+      prospectIntro = parsed.prospectIntro || "";
       questions = parsed.questions;
       breakdownTemplates = parsed.breakdownTemplates;
     } catch {
@@ -119,7 +124,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({
       success: true,
-      data: { questions, breakdownTemplates },
+      data: { questions, breakdownTemplates, prospectIntro },
     } as GenerateQuestionsResponse);
   } catch {
     return errorResponse("Erreur interne. Réessayez.", 500);

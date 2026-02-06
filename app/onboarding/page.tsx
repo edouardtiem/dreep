@@ -151,6 +151,7 @@ export default function OnboardingPage() {
                     }
                     setQuestions(json.data.questions);
                     setBreakdownTemplates(json.data.breakdownTemplates);
+                    setUnderstanding({ ...editedUnderstanding, prospectIntro: json.data.prospectIntro });
                     setIsGenerating(false);
                     goTo(3);
                   } catch {
