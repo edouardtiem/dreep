@@ -7,15 +7,6 @@ interface StepLinkReadyProps {
   onReset: () => void;
 }
 
-const outreachMessage = `Bonjour [Prénom],
-
-Suite à notre échange, j'ai préparé un diagnostic rapide pour vous aider à quantifier l'impact de [problème]. Ça prend 2 minutes :
-
-[lien]
-
-À bientôt,
-[Votre nom]`;
-
 export default function StepLinkReady({ diagnosticId, onReset }: StepLinkReadyProps) {
   const [copied, setCopied] = useState(false);
   const [email, setEmail] = useState("");
@@ -184,15 +175,24 @@ export default function StepLinkReady({ diagnosticId, onReset }: StepLinkReadyPr
         </div>
       )}
 
-      {/* Outreach message suggestion */}
+      {/* How it works */}
       <div className="space-y-3">
         <label className="block text-[11px] font-semibold uppercase tracking-[0.08em] text-slate">
-          Message d&apos;accroche sugg&eacute;r&eacute;
+          Comment &ccedil;a marche
         </label>
-        <div className="bg-surface border border-border rounded-xl p-6">
-          <p className="text-[15px] text-ink-light whitespace-pre-line leading-relaxed">
-            {outreachMessage}
-          </p>
+        <div className="bg-surface border border-border rounded-xl p-6 space-y-4">
+          <div className="flex items-start gap-3">
+            <span className="w-6 h-6 bg-ink text-white rounded-full flex items-center justify-center text-[12px] font-bold shrink-0">1</span>
+            <p className="text-[15px] text-ink-light"><span className="font-semibold text-ink">Copiez le lien</span> ci-dessus</p>
+          </div>
+          <div className="flex items-start gap-3">
+            <span className="w-6 h-6 bg-ink text-white rounded-full flex items-center justify-center text-[12px] font-bold shrink-0">2</span>
+            <p className="text-[15px] text-ink-light"><span className="font-semibold text-ink">Envoyez-le</span> &agrave; votre prospect par email, LinkedIn ou WhatsApp</p>
+          </div>
+          <div className="flex items-start gap-3">
+            <span className="w-6 h-6 bg-ink text-white rounded-full flex items-center justify-center text-[12px] font-bold shrink-0">3</span>
+            <p className="text-[15px] text-ink-light">Quand il r&eacute;pond, <span className="font-semibold text-ink">vous recevez son r&eacute;sultat par email</span></p>
+          </div>
         </div>
       </div>
 
