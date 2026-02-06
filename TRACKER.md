@@ -8,14 +8,18 @@
 | 3 | Prospect experience (`/d/[id]`) | ✅ Done |
 | 4 | AI integration (web scraping + Claude) | ✅ Done |
 | 5 | Database + shareable links (Supabase) | ✅ Done |
-| 6 | Product-led loop (Dreep branding, viral CTA) | Planned |
+| 6 | Product-led loop (PLG footer link + email capture) | ✅ Done |
 | 7 | Programmatic SEO pages engine | Planned |
 | 8 | Polish (emails, notifications, analytics) | Planned |
 
 ## What Works Today
 - Salesperson pastes any company URL → AI analyzes the site → generates personalized diagnostic
 - 5-step onboarding: URL → company understanding (editable) → slider questions → animated cost result → shareable link
-- Prospect experience at `/d/[id]` (still on mock data — needs Supabase)
+- Prospect experience at `/d/[id]` with real data from Supabase
+- Shareable result links at `/r/[responseId]`
+- "Powered by Dreep" footer links to homepage (PLG viral loop)
+- Salesperson email capture at Step 5 — stored in DB for future notifications
+- Email prefilled from localStorage for returning users
 - Tested on: dealslate.app, acceor.com, koban.cloud, axonaut.com, boondmanager.com — all produce relevant diagnostics
 
 ## What Doesn't Work Yet
@@ -45,6 +49,8 @@
 | 2026-02-06 | InactionTicker: live cost counter ticking at 0.08 EUR/s in red monospace below CTA |
 | 2026-02-06 | Tagline: "Les meilleurs closers ne pitchent plus. Ils calculent." (chosen via multi-agent copywriting) |
 | 2026-02-06 | ROADMAP.md created: positioning, dual distribution strategy, pricing tiers, ICP |
+| 2026-02-06 | **Phase 6**: PLG footer link (Dreep → homepage, target=_blank) + salesperson email capture at Step 5 |
+| 2026-02-06 | PATCH `/api/diagnostics/[id]` endpoint for email updates, `email` column added to diagnostics table |
 
 ## Decisions
 | # | Decision | Rationale | Date |
@@ -59,11 +65,15 @@
 | 8 | Homepage = product (no separate landing page) | Show the tool immediately, no "why use Dreep" page needed | 2026-02-06 |
 | 9 | Identity-based tagline over feature-based | "Les meilleurs closers ne pitchent plus. Ils calculent." — aspirational positioning | 2026-02-06 |
 | 10 | "Inaction Meter" over floating quotes | Strikethrough + live ticker creates urgency; floating quotes felt bland | 2026-02-06 |
+| 11 | Email capture at Step 5 (not Step 4) | Non-blocking — salesperson sees their link first, then opts into notifications | 2026-02-06 |
+| 12 | Skip onboarding/page.tsx for email capture | Legacy route — focus on page.tsx which is the main flow | 2026-02-06 |
 
 ## Architecture
 ```
 app/
 ├── api/analyze/route.ts                # POST: URL → curl → strip HTML → Claude → DiagnosticData
+├── api/diagnostics/route.ts            # POST: save new diagnostic to Supabase
+├── api/diagnostics/[id]/route.ts       # PATCH: update diagnostic (email capture)
 ├── lib/
 │   ├── types.ts                        # Shared interfaces (DiagnosticData, Breakdown, etc.)
 │   └── compute.ts                      # Formula evaluation (computeBreakdowns, buildDisplayFormula)

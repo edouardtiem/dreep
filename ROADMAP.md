@@ -49,15 +49,30 @@ These pages rank on Google AND get indexed by LLMs (Perplexity, ChatGPT, Gemini)
 - "Share with your team" feature for prospects (viral within buying committee)
 - Basic analytics: opened / completed / shared / meeting booked
 
-### Phase 7 — Programmatic SEO Engine
-**Goal:** Hundreds of interactive calculator pages that rank.
-- Admin tool: pick a topic → Claude generates questions + formulas → publish as static page
-- Template: interactive sliders + animated result + CTA to personalized version
-- Sitemap generation for Google indexing
-- Schema markup for rich snippets
-- Topics sourced from: common B2B pain points, industry-specific problems, tool categories
+### Phase 7 — SEO/GEO: Seed Pages + Analytics
+**Goal:** Validate the SEO page template + set up measurement.
+- 5-10 manual pages: `/cout/[problem]/[industry]` (stat block, mini-calculator, FAQ, CTA)
+- GEO-optimized: FAQPage schema, specific numbers, entity reinforcement
+- Google Analytics 4 + Search Console setup
+- Track: page views, calculator engagement, CTA clicks, conversions
+- See `SEO-GEO-STRATEGY.md` for full plan
 
-### Phase 8 — Polish & Growth
+### Phase 8 — SEO/GEO: Programmatic Engine
+**Goal:** Scale to 300+ pages from a content pipeline.
+- ~20 problems × ~15 industries matrix
+- Claude generates page content at build time
+- Hub pages (problem hubs + industry hubs) for topical authority
+- Auto-generated sitemap, internal linking
+- See `SEO-GEO-STRATEGY.md` Phase 3
+
+### Phase 9 — SEO/GEO: Data-Driven Content
+**Goal:** Replace estimates with real anonymized diagnostic data.
+- Aggregate completed diagnostics per problem×industry
+- "Basé sur N diagnostics" social proof badge
+- Unique data moat no competitor can replicate
+- See `SEO-GEO-STRATEGY.md` Phase 4
+
+### Phase 10 — Polish & Growth
 - User accounts + login (Clerk or Supabase Auth)
 - Custom branding (logo, colors) for Pro tier
 - Dashboard: list diagnostics, response status, conversion metrics
