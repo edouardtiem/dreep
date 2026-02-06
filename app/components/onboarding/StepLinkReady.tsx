@@ -7,6 +7,12 @@ interface StepLinkReadyProps {
   onReset: () => void;
 }
 
+function trackEvent(name: string, params?: Record<string, string | number>) {
+  if (typeof window !== "undefined" && typeof window.gtag === "function") {
+    window.gtag("event", name, params);
+  }
+}
+
 export default function StepLinkReady({ diagnosticId, onReset }: StepLinkReadyProps) {
   const [copied, setCopied] = useState(false);
   const [email, setEmail] = useState("");
@@ -33,6 +39,7 @@ export default function StepLinkReady({ diagnosticId, onReset }: StepLinkReadyPr
     try {
       await navigator.clipboard.writeText(shareableLink);
       setCopied(true);
+      trackEvent("link_copied");
       setTimeout(() => setCopied(false), 2000);
     } catch {
       // Fallback: do nothing if clipboard API is unavailable
@@ -55,6 +62,7 @@ export default function StepLinkReady({ diagnosticId, onReset }: StepLinkReadyPr
 
       if (json.success) {
         setEmailSubmitted(true);
+        trackEvent("email_captured");
         try {
           localStorage.setItem("dreep_email", email.trim());
         } catch {

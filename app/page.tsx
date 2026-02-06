@@ -20,6 +20,12 @@ const stepLabels = [
   "Lien pr\u00eat",
 ];
 
+function trackEvent(name: string, params?: Record<string, string | number>) {
+  if (typeof window !== "undefined" && typeof window.gtag === "function") {
+    window.gtag("event", name, params);
+  }
+}
+
 export default function Home() {
   const [currentStep, setCurrentStep] = useState(1);
   const [url, setUrl] = useState("");
@@ -91,6 +97,7 @@ export default function Home() {
                 onNext={(submittedUrl, u) => {
                   setUrl(submittedUrl);
                   setUnderstanding(u);
+                  trackEvent("funnel_step", { step: 2, step_name: "url_analyzed", url: submittedUrl });
                   goTo(2);
                 }}
               />
@@ -207,6 +214,7 @@ export default function Home() {
                     setBreakdownTemplates(json.data.breakdownTemplates);
                     setUnderstanding({ ...editedUnderstanding, prospectIntro: json.data.prospectIntro });
                     setIsGenerating(false);
+                    trackEvent("funnel_step", { step: 3, step_name: "questions_generated" });
                     goTo(3);
                   } catch {
                     setIsGenerating(false);
@@ -226,9 +234,9 @@ export default function Home() {
                     answers
                   );
                   setBreakdowns(computed);
-                  setAnnualCost(
-                    computed.reduce((sum, b) => sum + b.amount, 0)
-                  );
+                  const total = computed.reduce((sum, b) => sum + b.amount, 0);
+                  setAnnualCost(total);
+                  trackEvent("funnel_step", { step: 4, step_name: "result_viewed", annual_cost: total });
                   goTo(4);
                 }}
                 onBack={() => goTo(2)}
@@ -268,6 +276,7 @@ export default function Home() {
                   } catch {
                     // Save failed silently — still show link step with fallback
                   }
+                  trackEvent("funnel_step", { step: 5, step_name: "link_ready" });
                   goTo(5);
                 }}
                 onBack={() => goTo(3)}
