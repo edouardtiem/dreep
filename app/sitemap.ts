@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { coutPages } from "@/app/lib/cout-content";
 
-const BASE_URL = "https://dreep.fr";
+const BASE_URL = "https://www.dreep.app";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const coutEntries: MetadataRoute.Sitemap = coutPages.map((page) => ({

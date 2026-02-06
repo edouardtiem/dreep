@@ -6,6 +6,6 @@ export default function robots(): MetadataRoute.Robots {
       userAgent: "*",
       allow: "/",
     },
-    sitemap: "https://dreep.fr/sitemap.xml",
+    sitemap: "https://www.dreep.app/sitemap.xml",
   };
 }

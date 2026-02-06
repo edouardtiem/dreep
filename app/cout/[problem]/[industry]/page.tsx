@@ -25,7 +25,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const page = getCoutPage(problem, industry);
   if (!page) return {};
 
-  const url = `https://dreep.fr/cout/${problem}/${industry}`;
+  const url = `https://www.dreep.app/cout/${problem}/${industry}`;
 
   return {
     title: page.metaTitle,
