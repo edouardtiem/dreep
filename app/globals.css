@@ -1,31 +1,31 @@
 @import "tailwindcss";
 
 :root {
-  /* Core */
-  --ink: #0f172a;
-  --ink-light: #334155;
-  --slate: #64748b;
-  --mist: #94a3b8;
-  --border: #e2e8f0;
-  --surface: #f8fafc;
-  --cloud: #f1f5f9;
-  --white: #ffffff;
+  /* Core — dark theme */
+  --ink: #fafaf9;
+  --ink-light: #d4d4d8;
+  --slate: #a1a1aa;
+  --mist: #71717a;
+  --border: #27272a;
+  --surface: #18181b;
+  --cloud: #1f1f23;
+  --white: #09090b;
 
   /* Cost (red = data, not alarm) */
   --cost: #dc2626;
-  --cost-light: #fecaca;
-  --cost-wash: #fef2f2;
+  --cost-light: rgba(220, 38, 38, 0.2);
+  --cost-wash: rgba(220, 38, 38, 0.08);
   --cost-dark: #991b1b;
 
   /* Action (green) */
   --action: #059669;
-  --action-light: #a7f3d0;
-  --action-wash: #ecfdf5;
+  --action-light: rgba(5, 150, 105, 0.25);
+  --action-wash: rgba(5, 150, 105, 0.1);
 
   /* Signal (amber) */
   --signal: #d97706;
-  --signal-light: #fde68a;
-  --signal-wash: #fffbeb;
+  --signal-light: rgba(217, 119, 6, 0.2);
+  --signal-wash: rgba(217, 119, 6, 0.08);
 
   /* Brand (indigo — CTAs only) */
   --brand: #6366f1;
@@ -137,7 +137,7 @@ input[type="range"]::-webkit-slider-thumb {
   height: 18px;
   border-radius: 50%;
   background: var(--ink);
-  border: 2px solid var(--white);
+  border: 2px solid var(--surface);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
   margin-top: -6px;
   transition: transform 0.15s ease, box-shadow 0.15s ease;
@@ -159,7 +159,7 @@ input[type="range"]::-moz-range-thumb {
   height: 18px;
   border-radius: 50%;
   background: var(--ink);
-  border: 2px solid var(--white);
+  border: 2px solid var(--surface);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }

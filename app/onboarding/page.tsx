@@ -60,7 +60,7 @@ export default function OnboardingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white font-sans">
+    <div className="min-h-screen bg-white font-sans relative hero-noise hero-glow">
       {/* Step progress indicator */}
       <div className="sticky top-0 z-20 bg-white/90 backdrop-blur-md border-b border-border">
         <div className="max-w-2xl mx-auto px-6 py-4">

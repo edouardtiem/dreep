@@ -260,7 +260,7 @@ export default function ProspectExperience({
   }
 
   return (
-    <main className="min-h-screen bg-white font-sans">
+    <main className="min-h-screen bg-white font-sans relative hero-noise hero-glow">
       <AnimatePresence mode="wait">
         {currentScreen === "landing" && renderLanding()}
         {currentScreen === "questions" && renderQuestions()}
