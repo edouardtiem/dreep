@@ -56,6 +56,43 @@ function isValidUrl(str: string): boolean {
   }
 }
 
+function extractCompanyName(url: string): string {
+  const hostname = new URL(url).hostname;
+  return hostname.replace(/^www\./, "").split(".")[0];
+}
+
+async function searchCompanyContext(company: string): Promise<string> {
+  const apiKey = process.env.PERPLEXITY_API_KEY;
+  if (!apiKey) return "";
+
+  try {
+    const res = await fetch("https://api.perplexity.ai/chat/completions", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        model: "sonar",
+        messages: [
+          {
+            role: "user",
+            content: `Que vend l'entreprise ${company} en B2B ? Décris leurs produits/services principaux, leurs clients cibles, et comment fonctionne leur équipe commerciale. Sois factuel et concis.`,
+          },
+        ],
+        max_tokens: 500,
+      }),
+      signal: AbortSignal.timeout(8000),
+    });
+
+    if (!res.ok) return "";
+    const json = await res.json();
+    return json.choices?.[0]?.message?.content ?? "";
+  } catch {
+    return "";
+  }
+}
+
 const CLAUDE_PROMPT = `Tu es un expert en vente B2B et en diagnostic de coûts cachés.
 
 On te donne le contenu texte d'un site web d'entreprise. Tu dois analyser cette entreprise et produire un diagnostic structuré.
@@ -101,7 +138,8 @@ RÈGLES IMPORTANTES :
 - Les unités doivent être courtes : "personnes", "h/sem", "€/h", "erreurs/mois", "deals/mois", etc.
 - step doit correspondre à l'unité : 1 pour des personnes, 0.5 pour des heures, 5 pour des euros, etc.
 - category doit être EXACTEMENT une de ces 4 valeurs : "Coût de temps", "Coût direct", "Coût d'opportunité", "Coût de risque"
-- Tous les textes en français`;
+- Tous les textes en français
+- Si une recherche web est fournie, utilise-la pour mieux comprendre ce que l'entreprise vend réellement en B2B (pas juste ce que dit le site marketing)`;
 
 export async function POST(request: Request) {
   try {
@@ -112,11 +150,14 @@ export async function POST(request: Request) {
       return errorResponse("URL invalide");
     }
 
-    // Fetch the page via curl (cookie jar handles auth redirects like Clerk)
-    let html: string;
+    // Fetch page + search company context in parallel
     const cookieFile = join(tmpdir(), `dreep-${randomUUID()}.txt`);
+    const companyName = extractCompanyName(url);
+
+    let html: string;
+    let searchContext: string;
     try {
-      const { stdout } = await execFileAsync(
+      const curlPromise = execFileAsync(
         "curl",
         [
           "-sL",
@@ -129,8 +170,15 @@ export async function POST(request: Request) {
           url,
         ],
         { maxBuffer: 5 * 1024 * 1024 }
-      );
-      html = stdout;
+      ).then(({ stdout }) => stdout);
+
+      const [htmlResult, searchResult] = await Promise.all([
+        curlPromise,
+        searchCompanyContext(companyName),
+      ]);
+
+      html = htmlResult;
+      searchContext = searchResult;
     } catch {
       return errorResponse(
         "Le site n'a pas répondu. Vérifiez l'URL.",
@@ -165,7 +213,7 @@ export async function POST(request: Request) {
         messages: [
           {
             role: "user",
-            content: `${CLAUDE_PROMPT}\n\n--- CONTENU DU SITE ---\n${text}`,
+            content: `${CLAUDE_PROMPT}${searchContext ? `\n\n--- RECHERCHE WEB (contexte externe) ---\n${searchContext}` : ""}\n\n--- CONTENU DU SITE ---\n${text}`,
           },
         ],
       });
