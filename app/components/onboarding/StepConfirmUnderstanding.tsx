@@ -81,7 +81,7 @@ export default function StepConfirmUnderstanding({
       <div className="bg-signal-wash border border-signal-light/40 rounded-xl px-4 py-3.5">
         <p className="text-[13px] text-ink-light">
           <span className="font-semibold text-signal">Astuce :</span>{" "}
-          Ajoutez vos chiffres clés si vous en avez — ça rendra le diagnostic
+          Ajoutez vos chiffres clés si vous en avez — ça rendra le calculateur
           plus percutant
         </p>
       </div>

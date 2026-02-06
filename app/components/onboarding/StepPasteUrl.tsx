@@ -240,7 +240,7 @@ export default function StepPasteUrl({ onNext, hero = false }: StepPasteUrlProps
               Commen&ccedil;ons par votre site
             </h2>
             <p className="text-[15px] text-slate tracking-[-0.01em]">
-              On va analyser votre activit&eacute; pour cr&eacute;er votre diagnostic.
+              On va analyser votre activit&eacute; pour cr&eacute;er votre calculateur.
             </p>
           </div>
 
@@ -377,7 +377,7 @@ export default function StepPasteUrl({ onNext, hero = false }: StepPasteUrlProps
           <button
             onClick={handleAnalyze}
             disabled={!url.trim() || isLoading}
-            aria-label="Cr\u00e9er mon diagnostic"
+            aria-label="Cr\u00e9er mon calculateur"
             className="m-1.5 bg-brand text-white rounded-lg py-2.5 px-5 text-[14px] font-semibold hover:bg-brand-hover transition-colors duration-150 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer whitespace-nowrap"
           >
             {isLoading ? (
@@ -400,7 +400,7 @@ export default function StepPasteUrl({ onNext, hero = false }: StepPasteUrlProps
                 Analyse...
               </span>
             ) : (
-              "Cr\u00e9er mon diagnostic \u2192"
+              "Cr\u00e9er mon calculateur \u2192"
             )}
           </button>
         </div>
@@ -422,7 +422,7 @@ export default function StepPasteUrl({ onNext, hero = false }: StepPasteUrlProps
           <button
             onClick={handleAnalyze}
             disabled={!url.trim() || isLoading}
-            aria-label="Cr\u00e9er mon diagnostic"
+            aria-label="Cr\u00e9er mon calculateur"
             className="w-full bg-brand text-white rounded-xl py-3.5 px-5 text-[15px] font-semibold hover:bg-brand-hover transition-colors duration-150 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
           >
             {isLoading ? (
@@ -445,7 +445,7 @@ export default function StepPasteUrl({ onNext, hero = false }: StepPasteUrlProps
                 Analyse...
               </span>
             ) : (
-              "Cr\u00e9er mon diagnostic \u2192"
+              "Cr\u00e9er mon calculateur \u2192"
             )}
           </button>
         </div>
@@ -475,7 +475,7 @@ export default function StepPasteUrl({ onNext, hero = false }: StepPasteUrlProps
         >
           <div className="min-w-0">
             <p className="text-[13px] text-hero-muted font-medium">
-              Votre dernier diagnostic
+              Votre dernier calculateur
             </p>
             <p className="text-[13px] text-hero-text truncate">
               {savedDiagnostics[0].url}

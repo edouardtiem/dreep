@@ -47,8 +47,8 @@ export const coutPages: CoutPageData[] = [
           "Chaque départ de développeur retarde le roadmap de 2-4 semaines en moyenne. Sur une équipe de 8, perdre 2 personnes par an représente 1-2 mois de features perdues, soit un manque à gagner de 50 000 à 200 000 € en ARR retardé.",
       },
     ],
-    ctaHeading: "Découvrez votre coût exact avec un diagnostic personnalisé",
-    ctaButtonLabel: "Créer mon diagnostic gratuit",
+    ctaHeading: "Découvrez votre coût exact avec un calculateur personnalisé",
+    ctaButtonLabel: "Créer mon calculateur gratuit",
     relatedPages: [
       { problem: "churn-client", industry: "saas-b2b", label: "Coût du churn client en SaaS B2B" },
       { problem: "recrutement-rate", industry: "pme", label: "Coût d'un recrutement raté en PME" },
@@ -99,8 +99,8 @@ export const coutPages: CoutPageData[] = [
           "Un cabinet spécialisé réduit le taux d'échec de 25-30 % à 5-10 % grâce au sourcing ciblé, aux assessments structurés, et à la garantie de remplacement. Le ROI est positif dès que le coût du cabinet est inférieur au risque d'erreur : 8 000 € de cabinet vs 45 000 € d'erreur.",
       },
     ],
-    ctaHeading: "Découvrez votre coût exact avec un diagnostic personnalisé",
-    ctaButtonLabel: "Créer mon diagnostic gratuit",
+    ctaHeading: "Découvrez votre coût exact avec un calculateur personnalisé",
+    ctaButtonLabel: "Créer mon calculateur gratuit",
     relatedPages: [
       { problem: "turnover", industry: "startup-saas", label: "Coût du turnover en startup SaaS" },
       { problem: "poste-vacant", industry: "cabinet-recrutement", label: "Coût d'un poste vacant non pourvu" },
@@ -155,8 +155,8 @@ export const coutPages: CoutPageData[] = [
           "Réduire le churn de 1 point (de 2 % à 1 % mensuel) sur un ARR de 2M€ économise environ 240 000 € par an en revenu direct. Un CSM coûte 50-70k€/an et peut gérer 30-50 comptes. Le ROI est généralement de 3-5× dès la première année.",
       },
     ],
-    ctaHeading: "Découvrez votre coût exact avec un diagnostic personnalisé",
-    ctaButtonLabel: "Créer mon diagnostic gratuit",
+    ctaHeading: "Découvrez votre coût exact avec un calculateur personnalisé",
+    ctaButtonLabel: "Créer mon calculateur gratuit",
     relatedPages: [
       { problem: "turnover", industry: "startup-saas", label: "Coût du turnover en startup SaaS" },
       { problem: "onboarding-client-bacle", industry: "agence-digitale", label: "Coût d'un onboarding client bâclé" },
@@ -203,16 +203,16 @@ export const coutPages: CoutPageData[] = [
       {
         question: "Comment automatiser la prospection en tant que consultant ?",
         answer:
-          "Les leviers les plus efficaces : contenu LinkedIn (inbound), séquences email automatisées, outils de diagnostic interactif (comme Dreep) pour qualifier les prospects, et partenariats stratégiques. Le ROI d'un bon système d'automatisation se mesure en jours facturables récupérés.",
+          "Les leviers les plus efficaces : contenu LinkedIn (inbound), séquences email automatisées, calculateurs de coût interactifs (comme Dreep) pour qualifier les prospects, et partenariats stratégiques. Le ROI d'un bon système d'automatisation se mesure en jours facturables récupérés.",
       },
       {
         question: "Quel taux de conversion viser en prospection B2B ?",
         answer:
-          "Le benchmark en conseil B2B : 2-5 % en cold outreach, 10-20 % en inbound qualifié, 30-50 % via recommandation. Un diagnostic de coût personnalisé (ROI calculator) augmente le taux de conversion de 2-3× par rapport à un pitch classique.",
+          "Le benchmark en conseil B2B : 2-5 % en cold outreach, 10-20 % en inbound qualifié, 30-50 % via recommandation. Un calculateur de coût personnalisé augmente le taux de conversion de 2-3× par rapport à un pitch classique.",
       },
     ],
-    ctaHeading: "Découvrez votre coût exact avec un diagnostic personnalisé",
-    ctaButtonLabel: "Créer mon diagnostic gratuit",
+    ctaHeading: "Découvrez votre coût exact avec un calculateur personnalisé",
+    ctaButtonLabel: "Créer mon calculateur gratuit",
     relatedPages: [
       { problem: "pipeline-non-structure", industry: "equipe-commerciale", label: "Coût d'un pipeline non structuré" },
       { problem: "absence-crm", industry: "pme", label: "Coût de l'absence de CRM en PME" },
@@ -267,8 +267,8 @@ export const coutPages: CoutPageData[] = [
           "Utilisez un calculateur de coût interactif (comme Dreep) : le prospect saisit son nombre de commerciaux, son panier moyen, et ses deals perdus estimés. Le résultat chiffré crée un déclic émotionnel impossible à obtenir avec un pitch classique. Le taux de conversion augmente de 2-3×.",
       },
     ],
-    ctaHeading: "Créez ce diagnostic pour votre prospect en 30 secondes",
-    ctaButtonLabel: "Créer un diagnostic prospect",
+    ctaHeading: "Créez ce calculateur pour votre prospect en 30 secondes",
+    ctaButtonLabel: "Créer un calculateur prospect",
     relatedPages: [
       { problem: "absence-crm", industry: "pme", label: "Coût de l'absence de CRM en PME" },
       { problem: "churn-client", industry: "saas-b2b", label: "Coût du churn client en SaaS B2B" },
@@ -320,11 +320,11 @@ export const coutPages: CoutPageData[] = [
       {
         question: "Comment convaincre un dirigeant de PME d'adopter un CRM ?",
         answer:
-          "Montrez le coût de l'inaction avec des chiffres concrets : nombre de leads non relancés, temps passé en double saisie, CA perdu lors du départ du dernier commercial. Un diagnostic interactif comme Dreep transforme ces arguments abstraits en un montant précis et personnalisé.",
+          "Montrez le coût de l'inaction avec des chiffres concrets : nombre de leads non relancés, temps passé en double saisie, CA perdu lors du départ du dernier commercial. Un calculateur de coût comme Dreep transforme ces arguments abstraits en un montant précis et personnalisé.",
       },
     ],
-    ctaHeading: "Créez ce diagnostic pour votre prospect en 30 secondes",
-    ctaButtonLabel: "Créer un diagnostic prospect",
+    ctaHeading: "Créez ce calculateur pour votre prospect en 30 secondes",
+    ctaButtonLabel: "Créer un calculateur prospect",
     relatedPages: [
       { problem: "pipeline-non-structure", industry: "equipe-commerciale", label: "Coût d'un pipeline non structuré" },
       { problem: "recrutement-rate", industry: "pme", label: "Coût d'un recrutement raté en PME" },
@@ -371,7 +371,7 @@ export const coutPages: CoutPageData[] = [
       {
         question: "Pourquoi un cabinet de recrutement doit quantifier le coût du poste vacant ?",
         answer:
-          "Parce que vos honoraires (15-25 % du salaire annuel, soit 8 000 à 15 000 €) semblent élevés en valeur absolue. Mais comparés au coût du poste vacant (40 000 à 80 000 €), ils deviennent un investissement évident. Un diagnostic chiffré accélère la prise de décision de 30-50 %.",
+          "Parce que vos honoraires (15-25 % du salaire annuel, soit 8 000 à 15 000 €) semblent élevés en valeur absolue. Mais comparés au coût du poste vacant (40 000 à 80 000 €), ils deviennent un investissement évident. Un calculateur chiffré accélère la prise de décision de 30-50 %.",
       },
       {
         question: "Comment accélérer les recrutements de vos clients ?",
@@ -379,8 +379,8 @@ export const coutPages: CoutPageData[] = [
           "Envoyez un calculateur de coût de poste vacant à votre interlocuteur RH avant le premier call. Le montant affiché crée un sentiment d'urgence concret. Les cabinets qui utilisent cette technique réduisent leur cycle de vente de 2-3 semaines en moyenne.",
       },
     ],
-    ctaHeading: "Créez ce diagnostic pour votre prospect en 30 secondes",
-    ctaButtonLabel: "Créer un diagnostic prospect",
+    ctaHeading: "Créez ce calculateur pour votre prospect en 30 secondes",
+    ctaButtonLabel: "Créer un calculateur prospect",
     relatedPages: [
       { problem: "recrutement-rate", industry: "pme", label: "Coût d'un recrutement raté en PME" },
       { problem: "turnover", industry: "startup-saas", label: "Coût du turnover en startup SaaS" },
@@ -432,11 +432,11 @@ export const coutPages: CoutPageData[] = [
       {
         question: "Comment utiliser le coût de l'onboarding raté pour vendre ses services ?",
         answer:
-          "Si vous vendez du conseil en agence ou un outil de gestion de projet, quantifiez le problème avant de pitcher la solution. Un diagnostic interactif (comme Dreep) permet au prospect de voir son propre coût en 30 secondes. Le taux de conversion passe de 10 % à 25-30 % avec cette approche.",
+          "Si vous vendez du conseil en agence ou un outil de gestion de projet, quantifiez le problème avant de pitcher la solution. Un calculateur de coût (comme Dreep) permet au prospect de voir son propre coût en 30 secondes. Le taux de conversion passe de 10 % à 25-30 % avec cette approche.",
       },
     ],
-    ctaHeading: "Créez ce diagnostic pour votre prospect en 30 secondes",
-    ctaButtonLabel: "Créer un diagnostic prospect",
+    ctaHeading: "Créez ce calculateur pour votre prospect en 30 secondes",
+    ctaButtonLabel: "Créer un calculateur prospect",
     relatedPages: [
       { problem: "churn-client", industry: "saas-b2b", label: "Coût du churn client en SaaS B2B" },
       { problem: "absence-crm", industry: "pme", label: "Coût de l'absence de CRM en PME" },

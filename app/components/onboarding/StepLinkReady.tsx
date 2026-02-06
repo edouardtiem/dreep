@@ -92,7 +92,7 @@ export default function StepLinkReady({ diagnosticId, onReset }: StepLinkReadyPr
         </div>
 
         <h2 className="font-serif text-[28px] font-normal text-ink">
-          Votre diagnostic est pr&ecirc;t !
+          Votre calculateur est pr&ecirc;t !
         </h2>
       </div>
 
@@ -143,7 +143,7 @@ export default function StepLinkReady({ diagnosticId, onReset }: StepLinkReadyPr
           ) : (
             <>
               <p className="text-[14px] text-ink-light">
-                Recevez une alerte quand un prospect compl&egrave;te ce diagnostic
+                Recevez une alerte quand un prospect compl&egrave;te ce calculateur
               </p>
               <div className="flex items-center gap-2">
                 <input
@@ -202,7 +202,7 @@ export default function StepLinkReady({ diagnosticId, onReset }: StepLinkReadyPr
           onClick={onReset}
           className="border border-border text-ink-light rounded-[10px] py-3.5 px-7 text-[15px] font-medium hover:bg-cloud transition-colors duration-150 cursor-pointer"
         >
-          Cr&eacute;er un autre diagnostic
+          Cr&eacute;er un autre calculateur
         </button>
       </div>
     </div>

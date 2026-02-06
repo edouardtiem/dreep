@@ -38,7 +38,7 @@ export default function StepTestDiagnostic({
 
       <div className="text-center space-y-2">
         <h2 className="font-serif text-[28px] font-normal text-ink">
-          Testez votre diagnostic
+          Testez votre calculateur
         </h2>
         <p className="text-[15px] text-slate tracking-[-0.01em]">
           Ajustez les curseurs pour simuler les réponses d&apos;un prospect.

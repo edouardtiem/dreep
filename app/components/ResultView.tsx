@@ -43,9 +43,9 @@ export default function ResultView({
     }
   }
 
-  const mailtoSubject = encodeURIComponent("Votre diagnostic de coût");
+  const mailtoSubject = encodeURIComponent("Votre calculateur de coût");
   const mailtoBody = encodeURIComponent(
-    `Bonjour,\n\nVoici le résultat de notre diagnostic :\n${shareUrl ?? ""}\n\nBonne lecture !`,
+    `Bonjour,\n\nVoici le résultat de votre calculateur de coût :\n${shareUrl ?? ""}\n\nBonne lecture !`,
   );
 
   return (
