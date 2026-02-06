@@ -13,6 +13,7 @@ Phase 4 (AI integration) is complete. The onboarding flow works end-to-end but e
 - Prospect page fetches real questions/formulas, computes breakdowns
 - Prospect responses saved to DB when they see their result
 - 404 for invalid diagnostic IDs
+- Returning user sees "Votre dernier diagnostic" card on homepage (localStorage)
 
 ## Completed Tasks
 

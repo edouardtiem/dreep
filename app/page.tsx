@@ -231,7 +231,18 @@ export default function Home() {
                       }),
                     });
                     const json = await res.json();
-                    if (json.success) setDiagnosticId(json.id);
+                    if (json.success) {
+                      setDiagnosticId(json.id);
+                      // Save to localStorage for returning user experience
+                      try {
+                        const prev = JSON.parse(localStorage.getItem("dreep_diagnostics") || "[]");
+                        const entry = { id: json.id, url, createdAt: new Date().toISOString() };
+                        const updated = [entry, ...prev.filter((d: { id: string }) => d.id !== json.id)].slice(0, 10);
+                        localStorage.setItem("dreep_diagnostics", JSON.stringify(updated));
+                      } catch {
+                        // localStorage unavailable — ignore
+                      }
+                    }
                   } catch {
                     // Save failed silently — still show link step with fallback
                   }

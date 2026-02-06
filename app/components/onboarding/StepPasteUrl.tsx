@@ -174,10 +174,33 @@ interface StepPasteUrlProps {
   hero?: boolean;
 }
 
+interface SavedDiagnostic {
+  id: string;
+  url: string;
+  createdAt: string;
+}
+
 export default function StepPasteUrl({ onNext, hero = false }: StepPasteUrlProps) {
   const [url, setUrl] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const [savedDiagnostics, setSavedDiagnostics] = useState<SavedDiagnostic[]>([]);
+  const [copied, setCopied] = useState(false);
+
+  // Read saved diagnostics from localStorage (SSR-safe)
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem("dreep_diagnostics");
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          setSavedDiagnostics(parsed);
+        }
+      }
+    } catch {
+      // localStorage unavailable — ignore
+    }
+  }, []);
 
   const handleAnalyze = async () => {
     if (!url.trim()) return;
@@ -443,6 +466,40 @@ export default function StepPasteUrl({ onNext, hero = false }: StepPasteUrlProps
         <span className="text-hero-subtle/40 mx-1">|</span>{" "}
         <span className="font-mono">30</span> secondes
       </motion.p>
+
+      {/* 6. Returning user card */}
+      {savedDiagnostics.length > 0 && (
+        <motion.div
+          className="w-full max-w-xl bg-hero-surface border border-hero-border rounded-xl px-4 py-3 flex items-center justify-between gap-3"
+          {...blurIn(1.1)}
+        >
+          <div className="min-w-0">
+            <p className="text-[13px] text-hero-muted font-medium">
+              Votre dernier diagnostic
+            </p>
+            <p className="text-[13px] text-hero-text truncate">
+              {savedDiagnostics[0].url}
+            </p>
+            {savedDiagnostics.length > 1 && (
+              <p className="text-[12px] text-hero-subtle mt-0.5">
+                et {savedDiagnostics.length - 1} autre{savedDiagnostics.length > 2 ? "s" : ""}
+              </p>
+            )}
+          </div>
+          <button
+            onClick={() => {
+              const link = window.location.origin + "/d/" + savedDiagnostics[0].id;
+              navigator.clipboard.writeText(link).then(() => {
+                setCopied(true);
+                setTimeout(() => setCopied(false), 2000);
+              });
+            }}
+            className="shrink-0 text-[13px] text-hero-text bg-hero-border hover:bg-hero-subtle/30 rounded-lg px-3 py-1.5 transition-colors duration-150 cursor-pointer"
+          >
+            {copied ? "Copi\u00e9 !" : "Copier le lien"}
+          </button>
+        </motion.div>
+      )}
     </div>
   );
 }
