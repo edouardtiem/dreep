@@ -41,10 +41,15 @@ export interface AnalyzeRequest {
 
 export interface AnalyzeResponse {
   success: true;
-  data: DiagnosticData;
+  data: { understanding: CompanyUnderstanding };
 }
 
 export interface AnalyzeErrorResponse {
   success: false;
   error: string;
+}
+
+export interface GenerateQuestionsResponse {
+  success: true;
+  data: { questions: DiagnosticQuestion[]; breakdownTemplates: BreakdownTemplate[] };
 }

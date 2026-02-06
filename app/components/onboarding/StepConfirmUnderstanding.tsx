@@ -1,18 +1,21 @@
 "use client";
 
 import { useState } from "react";
+import { motion } from "framer-motion";
 import type { CompanyUnderstanding } from "@/app/lib/types";
 
 interface StepConfirmUnderstandingProps {
   understanding: CompanyUnderstanding;
   onNext: (understanding: CompanyUnderstanding) => void;
   onBack: () => void;
+  loading?: boolean;
 }
 
 export default function StepConfirmUnderstanding({
   understanding,
   onNext,
   onBack,
+  loading = false,
 }: StepConfirmUnderstandingProps) {
   const [sells, setSells] = useState(understanding.sells);
   const [persona, setPersona] = useState(understanding.persona);
@@ -92,9 +95,31 @@ export default function StepConfirmUnderstanding({
         </button>
         <button
           onClick={handleNext}
-          className="bg-ink text-white rounded-[10px] py-3.5 px-7 text-[15px] font-semibold hover:bg-ink-light transition-colors duration-150 cursor-pointer"
+          disabled={loading}
+          className="bg-ink text-white rounded-[10px] py-3.5 px-7 text-[15px] font-semibold hover:bg-ink-light transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
         >
-          C&apos;est bon, on continue &rarr;
+          {loading ? (
+            <span className="flex items-center gap-2">
+              <span className="flex items-center gap-1">
+                {[0, 1, 2].map((i) => (
+                  <motion.span
+                    key={i}
+                    className="inline-block w-1.5 h-1.5 rounded-full bg-white"
+                    animate={{ opacity: [0.3, 1, 0.3] }}
+                    transition={{
+                      duration: 0.9,
+                      repeat: Infinity,
+                      delay: i * 0.15,
+                      ease: "easeInOut",
+                    }}
+                  />
+                ))}
+              </span>
+              G&eacute;n&eacute;ration des questions...
+            </span>
+          ) : (
+            <>C&apos;est bon, on continue &rarr;</>
+          )}
         </button>
       </div>
     </div>

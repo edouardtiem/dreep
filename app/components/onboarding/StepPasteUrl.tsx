@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import type { DiagnosticData, AnalyzeResponse, AnalyzeErrorResponse } from "@/app/lib/types";
+import type { CompanyUnderstanding, AnalyzeResponse, AnalyzeErrorResponse } from "@/app/lib/types";
 
 const OBJECTIONS = [
   "On n\u2019a pas le budget cette ann\u00e9e",
@@ -170,7 +170,7 @@ function InactionTicker() {
 /*  StepPasteUrl                                                       */
 /* ------------------------------------------------------------------ */
 interface StepPasteUrlProps {
-  onNext: (url: string, data: DiagnosticData) => void;
+  onNext: (url: string, understanding: CompanyUnderstanding) => void;
   hero?: boolean;
 }
 
@@ -223,7 +223,7 @@ export default function StepPasteUrl({ onNext, hero = false }: StepPasteUrlProps
       }
 
       setIsLoading(false);
-      onNext(url, json.data);
+      onNext(url, json.data.understanding);
     } catch {
       setError("Erreur interne. R\u00e9essayez.");
       setIsLoading(false);

@@ -9,7 +9,7 @@ import Anthropic from "@anthropic-ai/sdk";
 import type {
   AnalyzeResponse,
   AnalyzeErrorResponse,
-  DiagnosticData,
+  CompanyUnderstanding,
 } from "@/app/lib/types";
 
 const execFileAsync = promisify(execFile);
@@ -93,52 +93,24 @@ async function searchCompanyContext(company: string): Promise<string> {
   }
 }
 
-const CLAUDE_PROMPT = `Tu es un expert en vente B2B et en diagnostic de coûts cachés.
+const UNDERSTAND_PROMPT = `Tu es un expert en vente B2B.
 
-On te donne le contenu texte d'un site web d'entreprise. Tu dois analyser cette entreprise et produire un diagnostic structuré.
+On te donne le contenu texte d'un site web d'entreprise. Tu dois analyser cette entreprise et résumer ce qu'elle fait.
 
 Réponds UNIQUEMENT avec un objet JSON valide (pas de markdown, pas de commentaire), avec cette structure exacte :
 
 {
   "understanding": {
-    "sells": "Ce que l'entreprise vend (1-2 phrases)",
-    "persona": "À qui ils vendent — rôles, titres (1-2 phrases)",
+    "sells": "Ce que l'entreprise vend en B2B — sois précis sur les produits/services (1-2 phrases)",
+    "persona": "À qui ils vendent — rôles, titres des acheteurs (1-2 phrases)",
     "differentiator": "Leur avantage concurrentiel principal (1 phrase)",
     "target": "Taille et industrie cible (1 phrase)"
-  },
-  "questions": [
-    {
-      "id": "q1",
-      "label": "Question claire pour un prospect (en français)",
-      "min": 0,
-      "max": 100,
-      "defaultValue": 15,
-      "unit": "unité courte",
-      "step": 1
-    }
-  ],
-  "breakdownTemplates": [
-    {
-      "label": "Nom du poste de coût (en français)",
-      "category": "Coût de temps | Coût direct | Coût d'opportunité | Coût de risque",
-      "formulaDisplay": "{q1} personnes × {q2} h/sem × 48 sem × {q3} €/h",
-      "formulaExpr": "q1 * q2 * 48 * q3"
-    }
-  ]
+  }
 }
 
 RÈGLES IMPORTANTES :
-- Génère entre 5 et 7 questions (q1, q2, q3, etc.)
-- Génère entre 3 et 5 postes de coût (breakdownTemplates)
-- Les "id" des questions sont q1, q2, q3, etc.
-- Dans formulaExpr, utilise les id (q1, q2...) avec des opérateurs mathématiques simples (+, -, *, /, parenthèses)
-- Dans formulaDisplay, utilise {q1}, {q2} etc. comme placeholders — ils seront remplacés par "valeur unité"
-- Les montants doivent être réalistes pour une PME française
-- Les questions doivent être compréhensibles par un dirigeant non technique
-- Les unités doivent être courtes : "personnes", "h/sem", "€/h", "erreurs/mois", "deals/mois", etc.
-- step doit correspondre à l'unité : 1 pour des personnes, 0.5 pour des heures, 5 pour des euros, etc.
-- category doit être EXACTEMENT une de ces 4 valeurs : "Coût de temps", "Coût direct", "Coût d'opportunité", "Coût de risque"
 - Tous les textes en français
+- Sois factuel et précis — décris ce que les commerciaux vendent réellement, pas juste le slogan marketing
 - Si une recherche web est fournie, utilise-la pour mieux comprendre ce que l'entreprise vend réellement en B2B (pas juste ce que dit le site marketing)`;
 
 export async function POST(request: Request) {
@@ -204,16 +176,16 @@ export async function POST(request: Request) {
       );
     }
 
-    // Call Claude API
-    let diagnosticData: DiagnosticData;
+    // Call Claude API — understanding only
+    let understanding: CompanyUnderstanding;
     try {
       const message = await anthropic.messages.create({
         model: "claude-sonnet-4-5-20250929",
-        max_tokens: 2000,
+        max_tokens: 500,
         messages: [
           {
             role: "user",
-            content: `${CLAUDE_PROMPT}${searchContext ? `\n\n--- RECHERCHE WEB (contexte externe) ---\n${searchContext}` : ""}\n\n--- CONTENU DU SITE ---\n${text}`,
+            content: `${UNDERSTAND_PROMPT}${searchContext ? `\n\n--- RECHERCHE WEB (contexte externe) ---\n${searchContext}` : ""}\n\n--- CONTENU DU SITE ---\n${text}`,
           },
         ],
       });
@@ -229,25 +201,20 @@ export async function POST(request: Request) {
         jsonText = jsonText.replace(/^```(?:json)?\s*/, "").replace(/\s*```$/, "");
       }
 
-      diagnosticData = JSON.parse(jsonText) as DiagnosticData;
+      const parsed = JSON.parse(jsonText) as { understanding: CompanyUnderstanding };
 
-      // Basic shape validation
-      if (
-        !diagnosticData.understanding ||
-        !Array.isArray(diagnosticData.questions) ||
-        !Array.isArray(diagnosticData.breakdownTemplates) ||
-        diagnosticData.questions.length === 0 ||
-        diagnosticData.breakdownTemplates.length === 0
-      ) {
+      if (!parsed.understanding || !parsed.understanding.sells) {
         return errorResponse("Erreur interne. Réessayez.", 500);
       }
+
+      understanding = parsed.understanding;
     } catch {
       return errorResponse("Erreur interne. Réessayez.", 500);
     }
 
     return NextResponse.json({
       success: true,
-      data: diagnosticData,
+      data: { understanding },
     } as AnalyzeResponse);
   } catch {
     return errorResponse("Erreur interne. Réessayez.", 500);

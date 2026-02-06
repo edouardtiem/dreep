@@ -7,7 +7,7 @@ import StepConfirmUnderstanding from "@/app/components/onboarding/StepConfirmUnd
 import StepTestDiagnostic from "@/app/components/onboarding/StepTestDiagnostic";
 import StepSeeResult from "@/app/components/onboarding/StepSeeResult";
 import StepLinkReady from "@/app/components/onboarding/StepLinkReady";
-import type { DiagnosticData, CompanyUnderstanding, Breakdown } from "@/app/lib/types";
+import type { CompanyUnderstanding, Breakdown, DiagnosticQuestion, BreakdownTemplate, GenerateQuestionsResponse, AnalyzeErrorResponse } from "@/app/lib/types";
 import { computeBreakdowns } from "@/app/lib/compute";
 
 const TOTAL_STEPS = 5;
@@ -23,12 +23,14 @@ const stepLabels = [
 export default function Home() {
   const [currentStep, setCurrentStep] = useState(1);
   const [url, setUrl] = useState("");
-  const [diagnosticData, setDiagnosticData] = useState<DiagnosticData | null>(null);
   const [understanding, setUnderstanding] = useState<CompanyUnderstanding | null>(null);
+  const [questions, setQuestions] = useState<DiagnosticQuestion[]>([]);
+  const [breakdownTemplates, setBreakdownTemplates] = useState<BreakdownTemplate[]>([]);
   const [breakdowns, setBreakdowns] = useState<Breakdown[]>([]);
   const [annualCost, setAnnualCost] = useState(0);
   const [diagnosticId, setDiagnosticId] = useState<string | null>(null);
   const [direction, setDirection] = useState(1);
+  const [isGenerating, setIsGenerating] = useState(false);
 
   const goTo = (step: number) => {
     setDirection(step > currentStep ? 1 : -1);
@@ -37,8 +39,9 @@ export default function Home() {
 
   const handleReset = () => {
     setUrl("");
-    setDiagnosticData(null);
     setUnderstanding(null);
+    setQuestions([]);
+    setBreakdownTemplates([]);
     setBreakdowns([]);
     setAnnualCost(0);
     setDiagnosticId(null);
@@ -85,10 +88,9 @@ export default function Home() {
             >
               <StepPasteUrl
                 hero
-                onNext={(submittedUrl, data) => {
+                onNext={(submittedUrl, u) => {
                   setUrl(submittedUrl);
-                  setDiagnosticData(data);
-                  setUnderstanding(data.understanding);
+                  setUnderstanding(u);
                   goTo(2);
                 }}
               />
@@ -186,21 +188,40 @@ export default function Home() {
             {currentStep === 2 && understanding && (
               <StepConfirmUnderstanding
                 understanding={understanding}
-                onNext={(editedUnderstanding) => {
+                loading={isGenerating}
+                onNext={async (editedUnderstanding) => {
                   setUnderstanding(editedUnderstanding);
-                  goTo(3);
+                  setIsGenerating(true);
+                  try {
+                    const res = await fetch("/api/generate-questions", {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({ understanding: editedUnderstanding }),
+                    });
+                    const json: GenerateQuestionsResponse | AnalyzeErrorResponse = await res.json();
+                    if (!json.success) {
+                      setIsGenerating(false);
+                      return;
+                    }
+                    setQuestions(json.data.questions);
+                    setBreakdownTemplates(json.data.breakdownTemplates);
+                    setIsGenerating(false);
+                    goTo(3);
+                  } catch {
+                    setIsGenerating(false);
+                  }
                 }}
                 onBack={() => goTo(1)}
               />
             )}
 
-            {currentStep === 3 && diagnosticData && (
+            {currentStep === 3 && questions.length > 0 && (
               <StepTestDiagnostic
-                questions={diagnosticData.questions}
+                questions={questions}
                 onNext={(answers) => {
                   const computed = computeBreakdowns(
-                    diagnosticData.breakdownTemplates,
-                    diagnosticData.questions,
+                    breakdownTemplates,
+                    questions,
                     answers
                   );
                   setBreakdowns(computed);
@@ -218,7 +239,7 @@ export default function Home() {
                 breakdowns={breakdowns}
                 annualCost={annualCost}
                 onNext={async () => {
-                  if (!diagnosticData || !understanding) return goTo(5);
+                  if (questions.length === 0 || !understanding) return goTo(5);
                   try {
                     const res = await fetch("/api/diagnostics", {
                       method: "POST",
@@ -226,8 +247,8 @@ export default function Home() {
                       body: JSON.stringify({
                         url,
                         understanding,
-                        questions: diagnosticData.questions,
-                        breakdownTemplates: diagnosticData.breakdownTemplates,
+                        questions,
+                        breakdownTemplates,
                       }),
                     });
                     const json = await res.json();
