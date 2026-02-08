@@ -24,6 +24,10 @@ export default function ResultView({
 }: ResultViewProps) {
   const [copied, setCopied] = useState(false);
   const [shareUrl, setShareUrl] = useState(shareUrlProp);
+  const [email, setEmail] = useState("");
+  const [emailSent, setEmailSent] = useState(false);
+  const [emailLoading, setEmailLoading] = useState(false);
+  const [emailError, setEmailError] = useState("");
 
   useEffect(() => {
     if (!shareUrlProp && responseId) {
@@ -38,15 +42,35 @@ export default function ResultView({
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch {
-      // Fallback: prompt with the URL
       window.prompt("Copiez ce lien :", shareUrl);
     }
   }
 
-  const mailtoSubject = encodeURIComponent("Votre calculateur de coût");
-  const mailtoBody = encodeURIComponent(
-    `Bonjour,\n\nVoici le résultat de votre calculateur de coût :\n${shareUrl ?? ""}\n\nBonne lecture !`,
-  );
+  async function handleEmailSubmit() {
+    if (!responseId || !email.trim()) return;
+
+    setEmailError("");
+    setEmailLoading(true);
+
+    try {
+      const res = await fetch(`/api/responses/${responseId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email.trim() }),
+      });
+      const json = await res.json();
+
+      if (json.success) {
+        setEmailSent(true);
+      } else {
+        setEmailError(json.error || "Erreur lors de l'envoi.");
+      }
+    } catch {
+      setEmailError("Erreur réseau. Réessayez.");
+    } finally {
+      setEmailLoading(false);
+    }
+  }
 
   return (
     <div className="max-w-2xl mx-auto px-6 py-16">
@@ -89,13 +113,63 @@ export default function ResultView({
           >
             {copied ? "Lien copi\u00e9 \u2713" : "Copier le lien"}
           </button>
+        </div>
+      )}
 
-          <a
-            href={`mailto:?subject=${mailtoSubject}&body=${mailtoBody}`}
-            className="block w-full text-center border border-border text-ink rounded-[10px] py-3.5 px-7 text-[15px] font-semibold hover:bg-surface transition-colors duration-150"
-          >
-            Envoyer par email
-          </a>
+      {/* Email capture for prospect */}
+      {responseId && (
+        <div className="mt-6 space-y-3">
+          <label className="block text-[11px] font-semibold uppercase tracking-[0.08em] text-slate">
+            Recevoir par email
+          </label>
+          {emailSent ? (
+            <div className="flex items-center gap-2 bg-action-wash border border-action/20 rounded-[10px] py-3.5 px-[18px]">
+              <svg
+                className="w-5 h-5 text-action shrink-0"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={2.5}
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M4.5 12.75l6 6 9-13.5"
+                />
+              </svg>
+              <span className="text-[14px] text-action font-medium">
+                R&eacute;sultat envoy&eacute; !
+              </span>
+            </div>
+          ) : (
+            <>
+              <div className="flex items-center gap-2">
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    setEmailError("");
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") handleEmailSubmit();
+                  }}
+                  placeholder="votre@email.com"
+                  className="flex-1 bg-surface border border-border rounded-[10px] py-3.5 px-[18px] text-[14px] text-ink placeholder:text-mist outline-none focus:border-ink transition-colors duration-150"
+                />
+                <button
+                  onClick={handleEmailSubmit}
+                  disabled={emailLoading || !email.trim()}
+                  className="bg-ink text-white rounded-[10px] py-3.5 px-7 text-[15px] font-semibold hover:bg-ink-light transition-colors duration-150 shrink-0 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {emailLoading ? "..." : "Envoyer"}
+                </button>
+              </div>
+              {emailError && (
+                <p className="text-[13px] text-red-500">{emailError}</p>
+              )}
+            </>
+          )}
         </div>
       )}
 

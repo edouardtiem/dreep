@@ -42,10 +42,13 @@ These pages rank on Google AND get indexed by LLMs (Perplexity, ChatGPT, Gemini)
 - Save prospect answers on completion
 - Real shareable link in StepLinkReady
 
-### Phase 6 — Product-Led Loop
+### Phase 6 — Product-Led Loop ✅
 **Goal:** Every diagnostic sent is an ad for Dreep.
-- "Powered by Dreep — Create yours in 30s" footer on every `/d/[id]` page
-- Email notification to salesperson when prospect completes
+- ✅ "Powered by Dreep — Create yours in 30s" footer on every `/d/[id]` page
+- ✅ Email notification to salesperson when prospect completes (Resend)
+- ✅ Prospect can receive result by email (with full breakdown)
+- ✅ Prospect email captured in Supabase for salesperson traceability
+- ✅ BIMI sender branding (DNS + public SVG logo)
 - "Share with your team" feature for prospects (viral within buying committee)
 - Basic analytics: opened / completed / shared / meeting booked
 
